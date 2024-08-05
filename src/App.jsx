@@ -7,9 +7,9 @@ export default function App() {
       <Container className="mt-5">
         {/*Top Stack logo and review bar*/}
         <Stack direction="horizontal" gap="5" className="d-flex justify-content-between" >
-          <div className="d-flex">
-            <i className="align-self-baseline px-1"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-receipt"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2m4 -14h6m-6 4h6m-2 4h2" /></svg></i>
-            <p className="fw-bold font-monospace fs-5" >Invoice Generator</p>
+          <div className="d-flex align-items-center">
+            <i className="align-items-center px-1"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-receipt"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2m4 -14h6m-6 4h6m-2 4h2" /></svg></i>
+            <p className="fw-bold font-monospace fs-4" >Invoice Generator</p>
           </div>
           <div className="d-flex">
             <Button className="btn btn-primary" >Review Invoice </Button> 
@@ -18,7 +18,7 @@ export default function App() {
 
         {/*Invoice number and dates stack*/}
         <Stack direction="horizontal" className="d-flex my-5 justify-content-between">
-          <div class="input-group-sm d-inline-flex">
+          <div className="input-group-sm d-inline-flex">
             <span class="input-group-text" id="basic-addon2">Invoice Number</span>
             <input type="text" class="form-control" placeholder="Invoice001" aria-label="Invoice001" aria-describedby="basic-addon2" />
           </div>
@@ -27,9 +27,14 @@ export default function App() {
             <span>Due Date</span>
           </div>
         </Stack>
+        
+        {/*Section divider*/}
+        <Stack direction="horizontal" className="mx-2">
+          <div className="border-top border-primary w-100"></div>          
+        </Stack>
 
         {/*Invoice to and from stack*/}
-        <Stack direction="horizontal" className="mb-4">
+        <Stack direction="horizontal" className="my-4 mb-4">
 
           {/*To data stack*/}
           <Stack direction="vertical" className="mx-3">
@@ -54,6 +59,13 @@ export default function App() {
           </Stack>
 
         </Stack>
+
+
+        {/*Section divider*/}
+        <Stack direction="horizontal"  className="mx-2">
+          <div className="border-top border-primary my-4 w-100"></div>          
+        </Stack>
+
 
         {/*Assing Invoice Items Stack */}
         <Stack direction="horizontal" className="mx-3" gap="2">
@@ -89,6 +101,12 @@ export default function App() {
         <Stack direction="horizontal" className="mx-3 my-4 mb-4">
           <Button className="btn btn-primary d-flex align-items-center"><span className="px-1"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg></span>Add Item</Button>
         </Stack>
+
+        {/*Section divider*/}
+        <Stack direction="horizontal" className="mx-2">
+          <div className="border-top border-primary my-4 w-100"></div>          
+        </Stack>
+
         
          {/*Currency, tax rate and discount rate stack*/}
         <Stack direction="horizontal" gap="5" className="d-flex mx-3 my-4 justify-content-center align-items-center " >
@@ -113,20 +131,38 @@ export default function App() {
             </div>
         </Stack>
 
+        {/*Section divider*/}
+        <Stack direction="horizontal" className="mx-2">
+          <div className="border-top border-primary my-4 w-100"></div>          
+        </Stack>
+
+
         {/*Invoice total summary stack*/}
-        <Row>
-          <Col></Col>
-          <Col>
-            <Stack direction="vertical" className="mb-5">
-              <div><span className="mb-3">Subtotal: </span></div>
-              <div><span className="mb-4">Discount: </span></div>
-              <div><span className="mb-4">Tax: </span></div>
-              <div><span className="mb-3">Total: </span></div>
+
+        <Stack direction="horizontal" className="d-flex justify-content-between mx-2 my-4 mb-4">
+            <Stack direction="vertical" className="mx-3">
+              <div>
+                <span className="">Note:</span>
+                <textarea className="form-control my-2" placeholder="Add a relevant note or terms " aria-label="note"></textarea>
+              </div>
             </Stack>
-          </Col>
-        </Row>
 
+            <Stack direction="horizontal" className="w-25">
+              <Stack direction="vertical" className="align-items-end">
+                  <span className="mb-3">Subtotal: </span>             
+                  <span className="mb-3">Discount: </span>              
+                  <span className="mb-3">Tax: </span>            
+                  <span className="mb-3">Total: </span>
+              </Stack>
 
+              <Stack direction="vertical" className="align-items-end">                
+                <span className="mb-3">$250.00</span>            
+                <span className="mb-3">5%</span>            
+                <span className="mb-3">0%</span>           
+                <span className="mb-3">$237.50</span>
+              </Stack>      
+            </Stack>
+        </Stack>
 
       </Container>
      
