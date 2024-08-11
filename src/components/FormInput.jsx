@@ -1,56 +1,59 @@
 
 import { Stack, Button } from 'react-bootstrap'
-import React from 'react'
+import React, { useRef, useState} from 'react'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
+
 export default function FormInput(){
 
-    function setTodaysDate(){
-        const today = new Date()
+  
+    {/*Invoice Sender(From) info ref*/}
+    const sendernameRef = useRef();
+    const senderemailRef = useRef();
+    const senderaddressRef = useRef();
+    const senderphoneRef = useRef();
 
-        const f = new Intl.DateTimeFormat("en-us", {
-            
-            year: 'numeric',
-            month: 'short',
-            day: '2-digit',
-        })
+    {/*Invoice Reciever (To) info ref*/}
+    const clientnameRef = useRef();
+    const clientemailRef = useRef();
+    const clientaddressRef = useRef();
+    const clientphoneRef = useRef();
 
-        return f.format(today)
+    function getSender({senderName, senderEmail, senderAddress, senderPhone}){
+      console.log(sendernameRef.current.value)
     }
+    function getReciever({clientName, clientEmail, clientAddress, clientPhone}){
+      
+    }
+
+    
 
     return(
         <>
-        {/*Top Stack logo and review bar*/}
-        <Stack direction="horizontal" gap="5" className="d-flex justify-content-between" >
-          <div className="d-inline-flex align-items-baseline">
-            <i className="px-1"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-receipt"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2m4 -14h6m-6 4h6m-2 4h2" /></svg></i>
-            <p className="fw-bold font-monospace fs-4" >Invoice Generator</p>
-          </div>
-          <div className="d-inline-flex align-items-center">
-            <Button className="btn btn-primary" >Review Invoice </Button> 
-          </div>
-        </Stack>
-
         {/*Invoice number and dates stack*/}
         <Stack direction="horizontal" className="d-flex my-5 justify-content-between">
           <div className="d-inline-flex align-items-center">
             <span className="input-group" id="invoicenum">Invoice Number</span>
-            <input type="text" class="form-control" placeholder="Invoice001" aria-label="Invoice001" aria-describedby="invoicenum" />
+            <input type="text" className="form-control" placeholder="INV001" aria-label="Invoice001" aria-describedby="invoicenum" />
           </div>
           <div className="d-inline-flex align-items-center">
-            <span className="mx-5">Date: {setTodaysDate()}</span>
-            <label className='px-3'>Due Date</label>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker label="Select Date"/> 
-            </LocalizationProvider>
-          
+            <span className="mx-5 d-flex align-items-center"> <strong className='px-3'>Invoice Date:</strong> {
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker label="Select Date"/> 
+                </LocalizationProvider>}
+            </span>
+            <span className="d-flex align-items-center"> <strong className='px-3'>Due Date:</strong> {
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker label="Select Date"/> 
+                </LocalizationProvider>}
+            </span>
           </div>
         </Stack>
 
-                {/*Section divider*/}
-                <Stack direction="horizontal" className="mx-2">
+        {/*Section divider*/}
+        <Stack direction="horizontal" className="mx-2">
           <div className="border-top border-light-subtle w-100"></div>          
         </Stack>
 
@@ -61,10 +64,10 @@ export default function FormInput(){
           <Stack direction="vertical" className="mx-3">
             <div>
               <label className="my-3 fw-semibold">To:</label>
-              <input type="text" placeholder="Business Name" id="sender_name" class="form-control mb-2" aria-label="business name" />
-              <input type="email" placeholder="Sender Email" id="sender_email" class="form-control mb-2" aria-label="email" />
-              <input type="text" placeholder="Address" id="sender_address" class="form-control mb-2" aria-label="address" />
-              <input type="number" placeholder="Phone: example (123) 456778" id="sender_phone" class="form-control mb-2" aria-label="phone" />
+              <input type="text" ref={sendernameRef} placeholder="Business Name" id="sender_name" className="form-control mb-2" aria-label="business name" required />
+              <input type="email" ref={senderemailRef} placeholder="Sender Email" id="sender_email" className="form-control mb-2" aria-label="email" required/>
+              <input type="text" ref={senderaddressRef} placeholder="Address" id="sender_address" className="form-control mb-2" aria-label="address" required/>
+              <input type="number" ref={senderphoneRef} placeholder="Phone: example (123) 456778" id="sender_phone" className="form-control mb-2" aria-label="phone" required/>
             </div>
           </Stack>
 
@@ -72,10 +75,10 @@ export default function FormInput(){
           <Stack direction="vertical" className="mx-3">
             <div>
               <label className="my-3 fw-semibold">From:</label>
-              <input type="text" placeholder="Client Name" id="client_name" class="form-control mb-2" aria-label="business name" />
-              <input type="email" placeholder="Client Email" id="client_email" class="form-control mb-2" aria-label="email" />
-              <input type="text" placeholder="Address" id="client_address" class="form-control mb-2" aria-label="address" />
-              <input type="text" placeholder="Phone: example (123) 456778" id="client_phone" class="form-control mb-2" aria-label="phone" />
+              <input type="text" ref={clientnameRef} placeholder="Client Name" id="client_name" className="form-control mb-2" aria-label="business name" required />
+              <input type="email" ref={clientemailRef} placeholder="Client Email" id="client_email" className="form-control mb-2" aria-label="email" required />
+              <input type="text" ref={clientaddressRef} placeholder="Address" id="client_address" className="form-control mb-2" aria-label="address" required />
+              <input type="text" ref={clientphoneRef} placeholder="Phone: example (123) 456778" id="client_phone" className="form-control mb-2" aria-label="phone" required />
             </div>
           </Stack>
 
