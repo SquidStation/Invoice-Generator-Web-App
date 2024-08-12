@@ -2,13 +2,18 @@ import { Container, Stack, Form, Button, Row, Col } from "react-bootstrap";
 import FormInput from "./components/FormInput";
 import {useState } from 'react'
 import ReviewInvoice from "./components/ReviewInvoice";
+import { useInvoice } from "./contexts/InvoiceContext";
 
 export default function App() {
 
+  const { senderDetails } = useInvoice()
+
+    //State to show Invoice preview window
   const [showPreview, setShowPreview ] = useState()
 
   function showPreviewWindow(){
     setShowPreview(true)
+    console.log(senderDetails)
   }
 
 

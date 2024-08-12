@@ -9,12 +9,12 @@ export function useInvoice(){
 
 export const InvoiceProvider = ( {children} ) => {
 
-    const [senderDetails, setSenderDetails] = useState()
-    const [recieverDetails, setReceiverDetials] = useState()
-    const [invoiceItems, setInvoiceItems] = useState() 
-    const [invoiceTotals, setInvoiceTotals] = useState() 
+    const [senderDetails, setSenderDetails] = useState([])
+    const [recieverDetails, setReceiverDetials] = useState([])
+    const [invoiceItems, setInvoiceItems] = useState([]) 
+    const [invoiceTotals, setInvoiceTotals] = useState([]) 
 
-    const [invoiceForm, setInvoiceForm] = useState() //Track all invoice items in one state
+    const [invoiceForm, setInvoiceForm] = useState([]) //Track all invoice items in one state
 
     //a function with all invoice form details 
     function addInvoice({
@@ -33,28 +33,28 @@ export const InvoiceProvider = ( {children} ) => {
     }
     
 
-    function addSenderDetails({senderName, senderEmail, senderAddress, senderPhone, notes}){
-        setSenderDetails( (prevSenderDetails) => {
-            return [...prevSenderDetails, {senderName, senderEmail, senderAddress, senderPhone, notes}]
+    function addSenderDetails({senderName, senderEmail, senderAddress, senderPhone, notes, invoiceNum}){
+        setSenderDetails( prevSenderDetails => {
+            return [...prevSenderDetails, {senderName, senderEmail, senderAddress, senderPhone, notes, invoiceNum}]
         } )
     }
 
-    function addRecieverDetails({clientName, clientEmail, clientAddress, clientPhone}){
+    function addRecieverDetails({clientName, clientEmail, clientAddress, clientPhone, invoiceNum}){
         setReceiverDetials((prevRecieverDetails)=>{ 
-            return [...prevRecieverDetails, {clientName, clientEmail, clientAddress, clientPhone}]
+            return [...prevRecieverDetails, {clientName, clientEmail, clientAddress, clientPhone, invoiceNum}]
         })
     }
 
-    function addInvoiceItems({itemsName, itemDescription, itemQuantity, itemRate, itemAmount, itemId}){
+    function addInvoiceItems({itemsName, itemDescription, itemQuantity, itemRate, itemAmount, invoiceNum, itemId}){
         setInvoiceItems((prevInvoiceItems) => {
-            return [...prevInvoiceItems, {itemsName, itemDescription, itemQuantity, itemRate, itemAmount, id: uuidV4()}]
+            return [...prevInvoiceItems, {itemsName, itemDescription, itemQuantity, itemRate, itemAmount, invoiceNum, id: uuidV4()}]
         })
 
     }
 
-    function addInvoiceTotals({subtotal, discount, tax, total}){
+    function addInvoiceTotals({subtotal, discount, tax, total, invoiceNum}){
         setInvoiceTotals( (prevInvoiceTotals) => {
-            return [...prevInvoiceTotals, { subtotal, discount, tax, total}]
+            return [...prevInvoiceTotals, { subtotal, discount, tax, total, invoiceNum}]
         })
 
     }
@@ -79,6 +79,7 @@ export const InvoiceProvider = ( {children} ) => {
 
     return(
         <InvoiceContext.Provider value={ {
+            senderDetails,
             getInvoiceId,
             addSenderDetails,
             addRecieverDetails,

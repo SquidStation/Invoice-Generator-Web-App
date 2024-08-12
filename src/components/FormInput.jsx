@@ -4,9 +4,25 @@ import React, { useRef, useState} from 'react'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import {useInvoice } from '../contexts/InvoiceContext'
 
 
 export default function FormInput(){
+
+  //Pass all the defined states to this child component
+  const { senderDetails,addSenderDetails,addRecieverDetails,removeInvoiceItem,addInvoiceItems,addInvoiceTotals } = useInvoice()
+
+    {/*Default Cuurency value*/}
+    const defaultValue = "ÜSD"
+    const defaultRef = useRef()
+
+    {/*Invoice number and dates refs*/}
+    const invoiceNumRef = useRef();
+    const dateRef = useRef();
+    const dueDateRef = useRef();
+
+    {/*Invoice notes refs*/}
+    const notesRef = useRef();
 
   
     {/*Invoice Sender(From) info ref*/}
@@ -21,14 +37,18 @@ export default function FormInput(){
     const clientaddressRef = useRef();
     const clientphoneRef = useRef();
 
-    function getSender({senderName, senderEmail, senderAddress, senderPhone}){
-      console.log(sendernameRef.current.value)
-    }
-    function getReciever({clientName, clientEmail, clientAddress, clientPhone}){
-      
-    }
 
-    
+    function handleUserInput(e){
+      e.preventDefault()
+
+      addSenderDetails({
+          senderName: sendernameRef.current.value,
+          senderEmail: senderemailRef.current.value, 
+          senderAddress: senderaddressRef.current.value,
+          senderPhone: senderaddressRef.current.value,
+          notes: notesRef.current.value, invoiceNum: invoiceNumRef.current.value })
+
+    }
 
     return(
         <>
@@ -36,7 +56,7 @@ export default function FormInput(){
         <Stack direction="horizontal" className="d-flex my-5 justify-content-between">
           <div className="d-inline-flex align-items-center">
             <span className="input-group" id="invoicenum">Invoice Number</span>
-            <input type="text" className="form-control" placeholder="INV001" aria-label="Invoice001" aria-describedby="invoicenum" />
+            <input type="text" ref={invoiceNumRef} className="form-control" placeholder="INV001" aria-label="Invoice001" aria-describedby="invoicenum" />
           </div>
           <div className="d-inline-flex align-items-center">
             <span className="mx-5 d-flex align-items-center"> <strong className='px-3'>Invoice Date:</strong> {
@@ -64,7 +84,7 @@ export default function FormInput(){
           <Stack direction="vertical" className="mx-3">
             <div>
               <label className="my-3 fw-semibold">To:</label>
-              <input type="text" ref={sendernameRef} placeholder="Business Name" id="sender_name" className="form-control mb-2" aria-label="business name" required />
+              <input type="text" ref={sendernameRef} onChange={handleUserInput} placeholder="Business Name" id="sender_name" className="form-control mb-2" aria-label="business name" required />
               <input type="email" ref={senderemailRef} placeholder="Sender Email" id="sender_email" className="form-control mb-2" aria-label="email" required/>
               <input type="text" ref={senderaddressRef} placeholder="Address" id="sender_address" className="form-control mb-2" aria-label="address" required/>
               <input type="number" ref={senderphoneRef} placeholder="Phone: example (123) 456778" id="sender_phone" className="form-control mb-2" aria-label="phone" required/>
@@ -81,8 +101,111 @@ export default function FormInput(){
               <input type="text" ref={clientphoneRef} placeholder="Phone: example (123) 456778" id="client_phone" className="form-control mb-2" aria-label="phone" required />
             </div>
           </Stack>
-
         </Stack>
+
+         {/*Section divider*/}
+         <Stack direction="horizontal"  className="mx-2">
+          <div className="border-top border-light-subtle my-4 w-100"></div>          
+        </Stack>
+
+
+        {/*Adding Invoice Items Stack */}
+        <Stack direction="horizontal" className="mx-3" gap="2">
+          {/*Item Name and Description Stack */}
+          <Stack direction="vertical">
+            <label htmlFor="" className="mb-4 fw-semibold">Item</label>
+            <input type="text" placeholder="Item Name" id="Item_name" className="form-control mb-2" aria-label="Item name" />
+            <textarea className="form-control" placeholder="Item Description" aria-label="description"></textarea>
+          </Stack>
+          {/*Quantity Stack */}
+          <Stack direction="vertical">
+            <label htmlFor="" className="mb-4 fw-semibold">Qty</label>
+            <input type="number" id="Quantity" className="form-control mb-2" aria-label="Quantity" />
+          </Stack>
+          {/*Price Stack */}
+          <Stack direction="vertical">
+            <label htmlFor="" className="mb-4 fw-semibold">Rate</label>
+            <input type="number" id="Price" className="form-control mb-2" aria-label="Price" />
+          </Stack>
+          {/*Amount Stack */}
+          <Stack direction="vertical">
+            <label htmlFor="" className="mb-4 fw-semibold">Amount</label>
+            <input type="text" id="Amount" className="form-control mb-2" aria-label="Amount" />
+          </Stack>
+          {/*Action Stack */}
+          <Stack direction="vertical" className="d-flex align-items-center">
+            <label htmlFor="" className="mb-4 fw-semibold">Action</label>
+            <div>{/*Insert Icon*/}</div>
+          </Stack>
+        </Stack>
+        
+        {/*Add Items Button Stack */}
+        <Stack direction="horizontal" className="mx-3 my-4 mb-4">
+          <Button className="btn btn-primary d-flex align-items-center">{/*insert icon*/}Add Item</Button>
+        </Stack>
+
+        {/*Section divider*/}
+        <Stack direction="horizontal" className="mx-2">
+          <div className="border-top border-light-subtle my-4 w-100"></div>          
+        </Stack>
+
+        
+         {/*Currency, tax rate and discount rate stack*/}
+        <Stack direction="horizontal" gap="5" className="d-flex mx-3 my-4 justify-content-center align-items-center " >
+
+            <div className="input-group">
+              <span className="input-group-text" id="basic-addon1">Currency</span>
+              <select className="form-select" aria-label="default select">
+                <option ref={defaultRef} defaultValue={defaultValue}>$ USD</option>
+              </select>
+            </div>
+            
+            <div className="input-group">
+              <span className="input-group-text">Tax Rate</span>
+                <input type="text" className="form-control" aria-label="Amount (to the nearest dollar)" />
+              <span className="input-group-text">%</span>
+            </div>
+
+            <div className="input-group">
+              <span className="input-group-text">Discount </span>
+                <input type="text" className="form-control" aria-label="Amount (to the nearest dollar)" />
+              <span className="input-group-text">%</span>
+            </div>
+        </Stack>
+
+        {/*Section divider*/}
+        <Stack direction="horizontal" className="mx-2">
+          <div className="border-top border-light-subtle my-4 w-100"></div>          
+        </Stack>
+
+
+        {/*Invoice total summary stack*/}
+
+        <Stack direction="horizontal" className="d-flex justify-content-between mx-2 my-4 mb-4">
+            <Stack direction="vertical" className="mx-3">
+              <div>
+                <span className="fw-semibold">Note:</span>
+                <textarea className="form-control my-2" ref={notesRef} placeholder="Add a relevant note or terms " aria-label="note"></textarea>
+              </div>
+            </Stack>
+
+            <Stack direction="horizontal" className="w-25">
+              <Stack direction="vertical" className="align-items-end fw-semibold">
+                  <span className="mb-3">Subtotal: </span>             
+                  <span className="mb-3">Discount: </span>              
+                  <span className="mb-3">Tax: </span>            
+                  <span className="mb-3">Total: </span>
+              </Stack>
+
+              <Stack direction="vertical" className="align-items-end">                
+                <span className="mb-3">$250.00</span>            
+                <span className="mb-3">5%</span>            
+                <span className="mb-3">0%</span>           
+                <span className="mb-3">$237.50</span>
+              </Stack>      
+            </Stack>
+        </Stack>
+
         
         </>
     )
