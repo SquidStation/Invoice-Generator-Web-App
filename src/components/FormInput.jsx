@@ -2,18 +2,20 @@
 import { Stack, Button } from 'react-bootstrap'
 import React, { useRef, useState} from 'react'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import {useInvoice } from '../contexts/InvoiceContext'
+import { useInvoice } from '../contexts/InvoiceContext'
+
 
 
 export default function FormInput(){
 
   //Pass all the defined states to this child component
-  const { senderDetails,addSenderDetails,addRecieverDetails,removeInvoiceItem,addInvoiceItems,addInvoiceTotals } = useInvoice()
+  const { invoiceData, addInvoice } = useInvoice()
 
     {/*Default Cuurency value*/}
-    const defaultValue = "ÜSD"
+    const defaultValue = "USD"
     const defaultRef = useRef()
 
     {/*Invoice number and dates refs*/}
@@ -30,23 +32,54 @@ export default function FormInput(){
     const senderemailRef = useRef();
     const senderaddressRef = useRef();
     const senderphoneRef = useRef();
-
     {/*Invoice Reciever (To) info ref*/}
     const clientnameRef = useRef();
     const clientemailRef = useRef();
     const clientaddressRef = useRef();
     const clientphoneRef = useRef();
+     {/*Invoice Items ref*/}
+     const itemNameRef = useRef();
+     const itemDescriptionRef = useRef();
+     const itemQuantityRef = useRef();
+     const itemRateRef = useRef();
+     const itemAmountRef = useRef();
+     
+
+    //State to manage dates
+    const [dateValue, setDateValue] = useState(null)
+    const [dueDateValue, setDueDateValue] = useState (null)
 
 
     function handleUserInput(e){
       e.preventDefault()
 
-      addSenderDetails({
+      addInvoice({
+          invoiceNum: invoiceNumRef.current.value,
+          invoiceDate: dateValue.$D +"/"+dateValue.$M+"/"+dateValue.$y,
+          invoiceDueDate: dueDateValue.$D +"/"+dueDateValue.$M+"/"+dueDateValue.$y,
           senderName: sendernameRef.current.value,
           senderEmail: senderemailRef.current.value, 
           senderAddress: senderaddressRef.current.value,
           senderPhone: senderaddressRef.current.value,
-          notes: notesRef.current.value, invoiceNum: invoiceNumRef.current.value })
+          clientName: clientnameRef.current.value,
+          clientEmail: clientemailRef.current.value,
+          clientAddress: clientaddressRef.current.value,
+          clientPhone: clientphoneRef.current.value,
+          notes: notesRef.current.value,
+          itemName: itemNameRef.current.value,
+          itemDescription: itemDescriptionRef.current.value,
+          itemQuantity: itemQuantityRef.current.value,
+          itemRate: itemRateRef.current.value,
+          itemAmount: itemAmountRef.current.value,
+          subtotal: 2040,
+          discount: 0,
+          tax: 0,
+          total: 2040
+
+          })
+
+          console.log(invoiceData)
+          console.log(dateValue.$D +"/"+dateValue.$M+"/"+dateValue.$y)
 
     }
 
@@ -56,17 +89,17 @@ export default function FormInput(){
         <Stack direction="horizontal" className="d-flex my-5 justify-content-between">
           <div className="d-inline-flex align-items-center">
             <span className="input-group" id="invoicenum">Invoice Number</span>
-            <input type="text" ref={invoiceNumRef} className="form-control" placeholder="INV001" aria-label="Invoice001" aria-describedby="invoicenum" />
+            <input type="text" ref={invoiceNumRef} onChange={handleUserInput} className="form-control" placeholder="INV001" aria-label="Invoice001" aria-describedby="invoicenum" />
           </div>
           <div className="d-inline-flex align-items-center">
             <span className="mx-5 d-flex align-items-center"> <strong className='px-3'>Invoice Date:</strong> {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker label="Select Date"/> 
+                    <DatePicker ref={dateRef} value={dateValue} onChange={(newDateValue) => setDateValue(newDateValue)} label="Select Date"/> 
                 </LocalizationProvider>}
             </span>
             <span className="d-flex align-items-center"> <strong className='px-3'>Due Date:</strong> {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker label="Select Date"/> 
+                    <DatePicker ref={dueDateRef} value={dueDateValue} onChange={(newDueDateValue) => setDueDateValue(newDueDateValue)} label="Select Date"/> 
                 </LocalizationProvider>}
             </span>
           </div>
@@ -85,9 +118,9 @@ export default function FormInput(){
             <div>
               <label className="my-3 fw-semibold">To:</label>
               <input type="text" ref={sendernameRef} onChange={handleUserInput} placeholder="Business Name" id="sender_name" className="form-control mb-2" aria-label="business name" required />
-              <input type="email" ref={senderemailRef} placeholder="Sender Email" id="sender_email" className="form-control mb-2" aria-label="email" required/>
-              <input type="text" ref={senderaddressRef} placeholder="Address" id="sender_address" className="form-control mb-2" aria-label="address" required/>
-              <input type="number" ref={senderphoneRef} placeholder="Phone: example (123) 456778" id="sender_phone" className="form-control mb-2" aria-label="phone" required/>
+              <input type="email" ref={senderemailRef} onChange={handleUserInput} placeholder="Sender Email" id="sender_email" className="form-control mb-2" aria-label="email" required/>
+              <input type="text" ref={senderaddressRef} onChange={handleUserInput} placeholder="Address" id="sender_address" className="form-control mb-2" aria-label="address" required/>
+              <input type="number" ref={senderphoneRef} onChange={handleUserInput} placeholder="Phone: example (123) 456778" id="sender_phone" className="form-control mb-2" aria-label="phone" required/>
             </div>
           </Stack>
 
@@ -113,28 +146,28 @@ export default function FormInput(){
         <Stack direction="horizontal" className="mx-3" gap="2">
           {/*Item Name and Description Stack */}
           <Stack direction="vertical">
-            <label htmlFor="" className="mb-4 fw-semibold">Item</label>
-            <input type="text" placeholder="Item Name" id="Item_name" className="form-control mb-2" aria-label="Item name" />
-            <textarea className="form-control" placeholder="Item Description" aria-label="description"></textarea>
+            <label className="mb-4 fw-semibold">Item</label>
+            <input ref={itemNameRef} type="text" placeholder="Item Name" id="Item_name" className="form-control mb-2" aria-label="Item name" />
+            <textarea ref={itemDescriptionRef} className="form-control" placeholder="Item Description" aria-label="description"></textarea>
           </Stack>
           {/*Quantity Stack */}
           <Stack direction="vertical">
-            <label htmlFor="" className="mb-4 fw-semibold">Qty</label>
-            <input type="number" id="Quantity" className="form-control mb-2" aria-label="Quantity" />
+            <label className="mb-4 fw-semibold">Qty</label>
+            <input ref={itemQuantityRef} type="number" id="Quantity" className="form-control mb-2" aria-label="Quantity" />
           </Stack>
           {/*Price Stack */}
           <Stack direction="vertical">
-            <label htmlFor="" className="mb-4 fw-semibold">Rate</label>
-            <input type="number" id="Price" className="form-control mb-2" aria-label="Price" />
+            <label className="mb-4 fw-semibold">Rate</label>
+            <input ref={itemRateRef} type="number" id="Price" className="form-control mb-2" aria-label="Price" />
           </Stack>
           {/*Amount Stack */}
           <Stack direction="vertical">
-            <label htmlFor="" className="mb-4 fw-semibold">Amount</label>
-            <input type="text" id="Amount" className="form-control mb-2" aria-label="Amount" />
+            <label className="mb-4 fw-semibold">Amount</label>
+            <input ref={itemAmountRef} type="text" id="Amount" className="form-control mb-2" aria-label="Amount" />
           </Stack>
           {/*Action Stack */}
           <Stack direction="vertical" className="d-flex align-items-center">
-            <label htmlFor="" className="mb-4 fw-semibold">Action</label>
+            <label className="mb-4 fw-semibold">Action</label>
             <div>{/*Insert Icon*/}</div>
           </Stack>
         </Stack>
@@ -185,7 +218,7 @@ export default function FormInput(){
             <Stack direction="vertical" className="mx-3">
               <div>
                 <span className="fw-semibold">Note:</span>
-                <textarea className="form-control my-2" ref={notesRef} placeholder="Add a relevant note or terms " aria-label="note"></textarea>
+                <textarea className="form-control my-2" ref={notesRef} onChange={handleUserInput} placeholder="Add a relevant note or terms " aria-label="note"></textarea>
               </div>
             </Stack>
 

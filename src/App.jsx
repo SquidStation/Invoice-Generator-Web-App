@@ -5,15 +5,14 @@ import ReviewInvoice from "./components/ReviewInvoice";
 import { useInvoice } from "./contexts/InvoiceContext";
 
 export default function App() {
-
-  const { senderDetails } = useInvoice()
+  
+  const { invoiceData } = useInvoice()
 
     //State to show Invoice preview window
   const [showPreview, setShowPreview ] = useState()
 
   function showPreviewWindow(){
     setShowPreview(true)
-    console.log(senderDetails)
   }
 
 
@@ -28,7 +27,7 @@ export default function App() {
             <p className="fw-bold font-monospace fs-4" >Invoice Generator</p>
           </div>
           <div className="d-inline-flex align-items-center">
-            <Button className="btn btn-primary" type='submit' onClick = {() => showPreviewWindow()} >Review Invoice </Button> 
+            <Button className="btn btn-primary" type='submit' onSubmit = {() => showPreviewWindow()} >Review Invoice </Button> 
           </div>
         </Stack>
 

@@ -1,10 +1,13 @@
 import { Modal } from 'react-bootstrap'
+import { useInvoice } from '../contexts/InvoiceContext'
 
 
 import "../ReviewPage.css"
 
 
 export default function ReviewInvoice({show, handleClose}){
+
+  const {invoiceData} = useInvoice()
 
 
     return(
@@ -57,7 +60,7 @@ export default function ReviewInvoice({show, handleClose}){
                   <tr>
                     <td className="w-1/2 align-top">
                       <div className="text-sm text-neutral-600">
-                        <p className="font-bold">Supplier Company INC</p>
+                        <p className="font-bold">{}</p>
                         <p>Number: 23456789</p>
                         <p>VAT: 23456789</p>
                         <p>6622 Abshire Mills</p>
@@ -122,7 +125,7 @@ export default function ReviewInvoice({show, handleClose}){
                     <td className="border-b py-3 pl-2 pr-3 text-right">$60.00</td>
                   </tr>
                   <tr>
-                    <td colspan="7">
+                    <td colSpan="7">
                       <table className="w-full border-collapse border-spacing-0">
                         <tbody>
                           <tr>

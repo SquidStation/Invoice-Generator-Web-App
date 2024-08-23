@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react'
 import {v4 as uuidV4} from 'uuid'
+import useLocalStorage from '../hooks/useLocalStorage'
 
 const InvoiceContext = React.createContext()
 
@@ -9,83 +10,56 @@ export function useInvoice(){
 
 export const InvoiceProvider = ( {children} ) => {
 
-    const [senderDetails, setSenderDetails] = useState([])
-    const [recieverDetails, setReceiverDetials] = useState([])
-    const [invoiceItems, setInvoiceItems] = useState([]) 
-    const [invoiceTotals, setInvoiceTotals] = useState([]) 
-
-    const [invoiceForm, setInvoiceForm] = useState([]) //Track all invoice items in one state
-
+ 
+    const [invoiceData, setInvoiceData] = useLocalStorage('invoiceData', [])
+    
     //a function with all invoice form details 
-    function addInvoice({
-        invoiceNum,
-        invoiceDate, 
-        invoiceDueDate,
-        senderName, 
-        senderEmail, 
-        senderAddress, 
-        senderPhone,
-        clientName, 
-        clientEmail, 
-        clientAddress, 
-        clientPhone, notes}){
+    function addInvoice({ invoiceNum, invoiceDate, invoiceDueDate, senderName, senderEmail, senderAddress, 
+        senderPhone, clientName, clientEmail, clientAddress, clientPhone, notes, itemName, itemDescription,
+        itemQuantity, itemRate, itemAmount, subtotal, discount, tax, total})
+        {
 
-    }
+            setInvoiceData( prevInvoiceData => {
+                //make sure invoice exists or not
+                if(prevInvoiceData.find(data => data.invoiceNum === invoiceNum )){
+                    return prevInvoiceData
+                } else
+
+                return [...prevInvoiceData, { id: uuidV4(), invoiceNum, invoiceDate, 
+                    invoiceDueDate, senderName, senderEmail, senderAddress, senderPhone,
+                    clientName, clientEmail, clientAddress, clientPhone,
+                    notes, itemName, itemDescription, itemQuantity,
+                    itemRate, itemAmount, subtotal, discount, tax, total}] })
+
+        }
     
-
-    function addSenderDetails({senderName, senderEmail, senderAddress, senderPhone, notes, invoiceNum}){
-        setSenderDetails( prevSenderDetails => {
-            return [...prevSenderDetails, {senderName, senderEmail, senderAddress, senderPhone, notes, invoiceNum}]
-        } )
-    }
-
-    function addRecieverDetails({clientName, clientEmail, clientAddress, clientPhone, invoiceNum}){
-        setReceiverDetials((prevRecieverDetails)=>{ 
-            return [...prevRecieverDetails, {clientName, clientEmail, clientAddress, clientPhone, invoiceNum}]
-        })
-    }
-
-    function addInvoiceItems({itemsName, itemDescription, itemQuantity, itemRate, itemAmount, invoiceNum, itemId}){
-        setInvoiceItems((prevInvoiceItems) => {
-            return [...prevInvoiceItems, {itemsName, itemDescription, itemQuantity, itemRate, itemAmount, invoiceNum, id: uuidV4()}]
-        })
-
-    }
-
-    function addInvoiceTotals({subtotal, discount, tax, total, invoiceNum}){
-        setInvoiceTotals( (prevInvoiceTotals) => {
-            return [...prevInvoiceTotals, { subtotal, discount, tax, total, invoiceNum}]
-        })
-
-    }
-
     
-    //delete invoice item
-    function removeInvoiceItem({itemId}){
-        setInvoiceItems( prevInvoiceItems => {
-            return prevInvoiceItems.filter( invoiceItem => invoiceItem.id !== itemId)
+    //delete invoice
+    function deleteInvoiceData({invoiceId}){
+        setInvoiceData( prevInvoiceData => {
+            return prevInvoiceData.filter( invoiceData => invoiceData.id !== invoiceId)
         })
+    }
+
+    //delete invoice data items
+    function removeInvoiceItem(){
+
     }
 
     //find or search invoice item
-    function getInvoiceId(itemId){
-        invoiceItems.filter((invoiceItem) => (invoiceItem.id=== itemId) )
+    function getInvoice(invoiceId){
+        invoiceData.filter((invoiceItem) => (invoiceItem.id=== invoiceId) )
     }
-
-
-
 
 
 
     return(
         <InvoiceContext.Provider value={ {
-            senderDetails,
-            getInvoiceId,
-            addSenderDetails,
-            addRecieverDetails,
+            invoiceData,
+            getInvoice,
+            deleteInvoiceData,
             removeInvoiceItem,
-            addInvoiceItems,
-            addInvoiceTotals
+            addInvoice
         } }>
             
             {children}
