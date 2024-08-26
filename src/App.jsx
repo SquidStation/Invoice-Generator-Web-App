@@ -27,7 +27,7 @@ export default function App() {
             <p className="fw-bold font-monospace fs-4" >Invoice Generator</p>
           </div>
           <div className="d-inline-flex align-items-center">
-            <Button className="btn btn-primary" type='submit' onSubmit = {() => showPreviewWindow()} >Review Invoice </Button> 
+            <Button className="btn btn-primary" type='submit' onClick = {() => showPreviewWindow()} >Review Invoice </Button> 
           </div>
         </Stack>
 

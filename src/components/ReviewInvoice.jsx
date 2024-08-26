@@ -7,7 +7,12 @@ import "../ReviewPage.css"
 
 export default function ReviewInvoice({show, handleClose}){
 
-  const {invoiceData} = useInvoice()
+  const {getInvoice, invoiceData} = useInvoice()
+
+  const currentInvoiceData = invoiceData.slice(-1)
+
+  console.log(currentInvoiceData[0].clientName)
+
 
 
     return(
@@ -35,13 +40,13 @@ export default function ReviewInvoice({show, handleClose}){
                               <td className="border-r pr-4">
                                 <div>
                                   <p className="whitespace-nowrap text-slate-400 text-right">Date</p>
-                                  <p className="whitespace-nowrap font-bold text-main text-right">April 26, 2023</p>
+                                  <p className="whitespace-nowrap font-bold text-main text-right">{currentInvoiceData[0].invoiceDate}</p>
                                 </div>
                               </td>
                               <td className="pl-4">
                                 <div>
                                   <p className="whitespace-nowrap text-slate-400 text-right">Invoice #</p>
-                                  <p className="whitespace-nowrap font-bold text-main text-right">BRA-00335</p>
+                                  <p className="whitespace-nowrap font-bold text-main text-right">{currentInvoiceData[0].invoiceNum}</p>
                                 </div>
                               </td>
                             </tr>
@@ -60,22 +65,18 @@ export default function ReviewInvoice({show, handleClose}){
                   <tr>
                     <td className="w-1/2 align-top">
                       <div className="text-sm text-neutral-600">
-                        <p className="font-bold">{}</p>
-                        <p>Number: 23456789</p>
-                        <p>VAT: 23456789</p>
-                        <p>6622 Abshire Mills</p>
-                        <p>Port Orlofurt, 05820</p>
-                        <p>United States</p>
+                        <p className="font-bold">From: {currentInvoiceData[0].senderName}</p>
+                        <p> Email: {currentInvoiceData[0].senderEmail}</p>
+                        <p>Phone: {currentInvoiceData[0].senderPhone}</p>
+                        <p>Address: {currentInvoiceData[0].senderAddress}</p>
                       </div>
                     </td>
                     <td className="w-1/2 align-top text-right">
                       <div className="text-sm text-neutral-600">
-                        <p className="font-bold">Customer Company</p>
-                        <p>Number: 123456789</p>
-                        <p>VAT: 23456789</p>
-                        <p>9552 Vandervort Spurs</p>
-                        <p>Paradise, 43325</p>
-                        <p>United States</p>
+                        <p className="font-bold">To: {currentInvoiceData[0].clientName}</p>
+                        <p>Email: {currentInvoiceData[0].clientEmail}</p>
+                        <p>Phone: {currentInvoiceData[0].clientPhone}</p>
+                        <p>Address: {currentInvoiceData[0].clientAddress}</p>
                       </div>
                     </td>
                   </tr>
@@ -88,7 +89,7 @@ export default function ReviewInvoice({show, handleClose}){
                 <thead>
                   <tr>
                     <td className="border-b-2 border-main pb-3 pl-3 font-bold text-main">#</td>
-                    <td className="border-b-2 border-main pb-3 pl-2 font-bold text-main">Product details</td>
+                    <td className="border-b-2 border-main pb-3 pl-2 font-bold text-main">Item details</td>
                     <td className="border-b-2 border-main pb-3 pl-2 text-right font-bold text-main">Price</td>
                     <td className="border-b-2 border-main pb-3 pl-2 text-center font-bold text-main">Qty.</td>
                     <td className="border-b-2 border-main pb-3 pl-2 text-center font-bold text-main">VAT</td>

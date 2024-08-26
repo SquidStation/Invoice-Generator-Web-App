@@ -49,14 +49,21 @@ export default function FormInput(){
     const [dateValue, setDateValue] = useState(null)
     const [dueDateValue, setDueDateValue] = useState (null)
 
+    //State to monitor current InvoiceName/Id
+    const [invoiceName, setInvoiceName] = useState()
+
+    function getInvoiceName(){
+      setInvoiceName(invoiceNumRef.current.value)
+    }
+
 
     function handleUserInput(e){
       e.preventDefault()
 
       addInvoice({
           invoiceNum: invoiceNumRef.current.value,
-          invoiceDate: dateValue.$D +"/"+dateValue.$M+"/"+dateValue.$y,
-          invoiceDueDate: dueDateValue.$D +"/"+dueDateValue.$M+"/"+dueDateValue.$y,
+          invoiceDate: dateValue !== null? dateValue.$D +"/"+dateValue.$M+"/"+dateValue.$y: "",
+          invoiceDueDate: dateValue !== null? dueDateValue.$D +"/"+dueDateValue.$M+"/"+dueDateValue.$y: "",
           senderName: sendernameRef.current.value,
           senderEmail: senderemailRef.current.value, 
           senderAddress: senderaddressRef.current.value,
@@ -79,7 +86,7 @@ export default function FormInput(){
           })
 
           console.log(invoiceData)
-          console.log(dateValue.$D +"/"+dateValue.$M+"/"+dateValue.$y)
+   
 
     }
 
@@ -89,7 +96,7 @@ export default function FormInput(){
         <Stack direction="horizontal" className="d-flex my-5 justify-content-between">
           <div className="d-inline-flex align-items-center">
             <span className="input-group" id="invoicenum">Invoice Number</span>
-            <input type="text" ref={invoiceNumRef} onChange={handleUserInput} className="form-control" placeholder="INV001" aria-label="Invoice001" aria-describedby="invoicenum" />
+            <input type="text" ref={invoiceNumRef} onChange={handleUserInput} className="form-control" placeholder="INV001" aria-label="Invoice001" aria-describedby="invoicenum" required />
           </div>
           <div className="d-inline-flex align-items-center">
             <span className="mx-5 d-flex align-items-center"> <strong className='px-3'>Invoice Date:</strong> {
