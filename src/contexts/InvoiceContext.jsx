@@ -16,7 +16,7 @@ export const InvoiceProvider = ( {children} ) => {
     //a function with all invoice form details 
     function addInvoice({ invoiceNum, invoiceDate, invoiceDueDate, senderName, senderEmail, senderAddress, 
         senderPhone, clientName, clientEmail, clientAddress, clientPhone, notes, itemName, itemDescription,
-        itemQuantity, itemRate, itemAmount, subtotal, discount, tax, total})
+        itemQuantity, itemPrice, itemSubtotal, itemAmount, subtotal, discount, tax, total})
         {
 
             setInvoiceData( prevInvoiceData => {
@@ -29,7 +29,7 @@ export const InvoiceProvider = ( {children} ) => {
                     invoiceDueDate, senderName, senderEmail, senderAddress, senderPhone,
                     clientName, clientEmail, clientAddress, clientPhone,
                     notes, itemName, itemDescription, itemQuantity,
-                    itemRate, itemAmount, subtotal, discount, tax, total}] })
+                    itemPrice, itemSubtotal, itemAmount, subtotal, discount, tax, total}] })
 
         }
     

@@ -100,31 +100,14 @@ export default function ReviewInvoice({show, handleClose}){
                 <tbody>
                   <tr>
                     <td className="border-b py-3 pl-3">1.</td>
-                    <td className="border-b py-3 pl-2">Montly accountinc services</td>
-                    <td className="border-b py-3 pl-2 text-right">$150.00</td>
-                    <td className="border-b py-3 pl-2 text-center">1</td>
-                    <td className="border-b py-3 pl-2 text-center">20%</td>
-                    <td className="border-b py-3 pl-2 text-right">$150.00</td>
-                    <td className="border-b py-3 pl-2 pr-3 text-right">$180.00</td>
+                    <td className="border-b py-3 pl-2">{currentInvoiceData[0].itemName}</td>
+                    <td className="border-b py-3 pl-2 text-right">{currentInvoiceData[0].itemQuantity}</td>
+                    <td className="border-b py-3 pl-2 text-center">{currentInvoiceData[0].itemPrice}</td>
+                    {/*<td className="border-b py-3 pl-2 text-center">{currentInvoiceData[0].itemVAT}</td>*/}
+                    <td className="border-b py-3 pl-2 text-right">{currentInvoiceData[0].itemSubtotal}</td>
+                    <td className="border-b py-3 pl-2 pr-3 text-right">{currentInvoiceData[0].itemTotal}</td>
                   </tr>
-                  <tr>
-                    <td className="border-b py-3 pl-3">2.</td>
-                    <td className="border-b py-3 pl-2">Taxation consulting (hour)</td>
-                    <td className="border-b py-3 pl-2 text-right">$60.00</td>
-                    <td className="border-b py-3 pl-2 text-center">2</td>
-                    <td className="border-b py-3 pl-2 text-center">20%</td>
-                    <td className="border-b py-3 pl-2 text-right">$120.00</td>
-                    <td className="border-b py-3 pl-2 pr-3 text-right">$144.00</td>
-                  </tr>
-                  <tr>
-                    <td className="border-b py-3 pl-3">3.</td>
-                    <td className="border-b py-3 pl-2">Bookkeeping services</td>
-                    <td className="border-b py-3 pl-2 text-right">$50.00</td>
-                    <td className="border-b py-3 pl-2 text-center">1</td>
-                    <td className="border-b py-3 pl-2 text-center">20%</td>
-                    <td className="border-b py-3 pl-2 text-right">$50.00</td>
-                    <td className="border-b py-3 pl-2 pr-3 text-right">$60.00</td>
-                  </tr>
+
                   <tr>
                     <td colSpan="7">
                       <table className="w-full border-collapse border-spacing-0">
@@ -136,10 +119,10 @@ export default function ReviewInvoice({show, handleClose}){
                                 <tbody>
                                   <tr>
                                     <td className="border-b p-3">
-                                      <div className="whitespace-nowrap text-slate-400">Net total:</div>
+                                      <div className="whitespace-nowrap text-slate-400">Subtotal:</div>
                                     </td>
                                     <td className="border-b p-3 text-right">
-                                      <div className="whitespace-nowrap font-bold text-main">$320.00</div>
+                                      <div className="whitespace-nowrap font-bold text-main">{currentInvoiceData[0].subtotal}</div>
                                     </td>
                                   </tr>
                                   <tr>
@@ -155,7 +138,7 @@ export default function ReviewInvoice({show, handleClose}){
                                       <div className="whitespace-nowrap font-bold text-white">Total:</div>
                                     </td>
                                     <td className="bg-main p-3 text-right">
-                                      <div className="whitespace-nowrap font-bold text-white">$384.00</div>
+                                      <div className="whitespace-nowrap font-bold text-white">{currentInvoiceData[0].total}</div>
                                     </td>
                                   </tr>
                                 </tbody>
@@ -170,26 +153,25 @@ export default function ReviewInvoice({show, handleClose}){
               </table>
             </div>
 
-            <div className="px-14 text-sm text-neutral-700">
+{/*            <div className="px-14 text-sm text-neutral-700">
               <p className="text-main font-bold">PAYMENT DETAILS</p>
               <p>Banks of Banks</p>
               <p>Bank/Sort Code: 1234567</p>
               <p>Account Number: 123456678</p>
               <p>Payment Reference: BRA-00335</p>
-            </div>
+            </div> */}
 
             <div className="px-14 py-10 text-sm text-neutral-700">
               <p className="text-main font-bold">Notes</p>
-              <p className="italic">Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries
-                for previewing layouts and visual mockups.</p>
+              <p className="italic">{currentInvoiceData[0].notes}</p>
             </div>
 
               <footer className="fixed bottom-0 left-0 bg-slate-100 w-full text-neutral-600 text-center text-xs py-3">
-                Supplier Company
+                {currentInvoiceData[0].senderName}
                 <span className="text-slate-300 px-2">|</span>
-                info@company.com
+                {currentInvoiceData[0].senderAddress}
                 <span className="text-slate-300 px-2">|</span>
-                +1-202-555-0106
+                {currentInvoiceData[0].senderPhone}
               </footer>
             </div>
 
