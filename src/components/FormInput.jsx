@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useInvoice } from '../contexts/InvoiceContext'
+import AddInvoiceItem from './AddInvoiceItem';
 
 
 
@@ -58,7 +59,7 @@ export default function FormInput(){
 
     {/*state to update added items*/}
     const [itemSub, setItemSub] = useState(0) //set item subtotal
-    const [itemTotalAmount, setTotalAmount] = useState(0) //set item total amount
+    const [itemTotalAmount, setItemTotalAmount] = useState(0) //set item total amount
 
     {/*state to update invoice totals*/}
     const [invoiceSubtotal, setInvoiceSubtotal] = useState(0)
@@ -88,12 +89,15 @@ export default function FormInput(){
           clientAddress: clientaddressRef.current.value,
           clientPhone: clientphoneRef.current.value,
           notes: notesRef.current.value,
-          itemName: itemNameRef.current.value,
-          itemDescription: itemDescriptionRef.current.value,
-          itemQuantity: itemQuantityRef.current.value,
-          itemPrice: itemPriceRef.current.value,
-          itemSubtotal: itemQuantityRef.current.value * itemPriceRef.current.value,
-          itemAmount: itemQuantityRef.current.value * itemPriceRef.current.value * 0 + itemQuantityRef.current.value * itemPriceRef.current.value,
+          item: {
+            itemName: itemNameRef.current.value,
+            itemDescription: itemDescriptionRef.current.value,
+            itemQuantity: itemQuantityRef.current.value,
+            itemPrice: itemPriceRef.current.value,
+            itemSubtotal: itemQuantityRef.current.value * itemPriceRef.current.value,
+            itemAmount: itemQuantityRef.current.value * itemPriceRef.current.value * 0 + itemQuantityRef.current.value * itemPriceRef.current.value
+          },
+
           subtotal: 2040,
           discount: 0,
           tax: 0,
@@ -106,15 +110,8 @@ export default function FormInput(){
     }
 
        {/*function to calculate item totals*/}
-    function handleItemTotals(){
-      let itemTotal = 0;
-      let itemSub = 0;
-      const tax = itemPriceRef.current.value * vatRateRef.current.value * 0.01 * itemQuantityRef.current.value
-      console.log(tax)
-      itemSub = itemQuantityRef.current.value * itemPriceRef.current.value 
-      itemTotal = itemSub + tax
-      setItemSub(itemSub)
-      setTotalAmount(itemTotal)
+    function updateTax(){
+
     }
 
     {/*function to calculate invoice totals*/}
@@ -182,39 +179,41 @@ export default function FormInput(){
         </Stack>
 
 
-        {/*Adding Invoice Items Stack */}
-        <Stack direction="horizontal" className="mx-3" gap="2">
+        {/*Adding Invoice Item Headers */}
+        <Stack direction="horizontal" className="mx-3 d-flex justify-content-between">
           {/*Item Name and Description Stack */}
-          <Stack direction="vertical">
+          <Stack direction="vertical" className='align-items-start'>
             <label className="mb-4 fw-semibold">Item</label>
-            <input ref={itemNameRef} type="text" placeholder="Item Name" id="Item_name" className="form-control mb-2" aria-label="Item name" />
-            <textarea ref={itemDescriptionRef} className="form-control" placeholder="Item Description" aria-label="description"></textarea>
           </Stack>
           {/*Quantity Stack */}
-          <Stack direction="vertical">
+          <Stack direction="vertical" className='align-items-center'>
             <label className="mb-4 fw-semibold">Qty</label>
-            <input ref={itemQuantityRef} onChange={handleItemTotals} type="number" id="Quantity" className="form-control mb-2" aria-label="Quantity" />
           </Stack>
           {/*Price Stack */}
-          <Stack direction="vertical">
+          <Stack direction="vertical" className='align-items-end'>
             <label className="mb-4 fw-semibold">Price</label>
-            <input ref={itemPriceRef} onChange={handleItemTotals} placeholder='$' type="number" id="Price" className="form-control mb-2" aria-label="Price" />
           </Stack>
           {/*Amount Stack */}
-          <Stack direction="vertical">
+          <Stack direction="vertical" className='align-items-end'>
             <label className="mb-4 fw-semibold">Item Subtotal</label>
-            <input ref={itemSubtotalRef} disabled placeholder= {'$'+itemSub}  id="subtotal" className="form-control mb-2" aria-label="Amount" />
           </Stack>
-          <Stack direction="vertical">
-            <label className="mb-4 fw-semibold">Amount+VAT</label>
-            <input ref={itemAmountRef} placeholder= {'$'+itemTotalAmount}  disabled type="text" id="Amount" className="form-control mb-2" aria-label="Amount" />
+          <Stack direction="vertical" className='align-items-end'>
+            <label className="mb-4 fw-semibold d-flex">Amount+VAT</label>
           </Stack>
           {/*Action Stack */}
-          <Stack direction="vertical" className="d-flex align-items-center">
+          <Stack direction="vertical" className="d-flex align-items-end">
             <label className="mb-4 fw-semibold">Action</label>
-            <div>{/*Insert Icon*/}</div>
           </Stack>
-        </Stack>
+        </Stack> 
+
+        {/*Item List */}
+        <AddInvoiceItem nameRef={itemNameRef} 
+                        quantityRef={itemQuantityRef} 
+                        priceRef={itemPriceRef} 
+                        subtotalRef={itemSubtotalRef} 
+                        amountRef={itemAmountRef} 
+                        vatRef={vatRateRef}
+        />
         
         {/*Add Items Button Stack */}
         <Stack direction="horizontal" className="mx-3 my-4 mb-4">
@@ -239,7 +238,7 @@ export default function FormInput(){
             
             <div className="input-group">
               <span className="input-group-text">VAT Rate</span>
-                <input ref={vatRateRef} type="number" onChange={handleItemTotals} className="form-control" aria-label="Amount (to the nearest dollar)" />
+                <input ref={vatRateRef} type="number" onChange={updateTax} className="form-control" aria-label="Amount (to the nearest dollar)" />
               <span className="input-group-text">%</span>
             </div>
 
