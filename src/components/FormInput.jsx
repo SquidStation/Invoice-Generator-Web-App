@@ -1,12 +1,12 @@
 
 import { Stack, Button } from 'react-bootstrap'
-import React, { useRef, useState} from 'react'
+import React, { useEffect, useRef, useState} from 'react'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useInvoice } from '../contexts/InvoiceContext'
-import AddInvoiceItem from './AddInvoiceItem';
+import InvoiceItem from './InvoiceItem';
 
 
 
@@ -48,6 +48,7 @@ export default function FormInput(){
 
      {/*tax rate*/}
      const vatRateRef = useRef();
+     const discountRef = useRef();
      
 
     //State to manage dates
@@ -57,13 +58,26 @@ export default function FormInput(){
     //State to monitor current InvoiceName/Id
     const [invoiceName, setInvoiceName] = useState()
 
+    //State to monitor current VAT rate
+    const [taxRate, setTaxRate] = useState(0)
+
+    //State to monitor current discount rate
+    const [discountRate, setDiscountRate] = useState(0)
+
     {/*state to update added items*/}
     const [itemSub, setItemSub] = useState(0) //set item subtotal
     const [itemTotalAmount, setItemTotalAmount] = useState(0) //set item total amount
 
+    {/*State to track added invoice items in an array*/}
+    const [invoiceItems, setInvoiceItems] = useState([])
+    
+
     {/*state to update invoice totals*/}
     const [invoiceSubtotal, setInvoiceSubtotal] = useState(0)
     const [invoiceTotal, setInvoiceTotal] = useState(0)
+
+    {/*State to update*/}
+    const [count, setCount] = useState(1)
 
     function getInvoiceName(){
       setInvoiceName(invoiceNumRef.current.value)
@@ -98,10 +112,10 @@ export default function FormInput(){
             itemAmount: itemQuantityRef.current.value * itemPriceRef.current.value * 0 + itemQuantityRef.current.value * itemPriceRef.current.value
           },
 
-          subtotal: 2040,
+          subtotal: invoiceSubtotal,
           discount: 0,
           tax: 0,
-          total: 2040
+          total: invoiceTotal
 
           })
 
@@ -109,15 +123,49 @@ export default function FormInput(){
    
     }
 
-       {/*function to calculate item totals*/}
+       {/*function to calculate and update tax rate*/}
     function updateTax(){
-
+      let tax = vatRateRef.current.value
+      setTaxRate(tax)
     }
 
     {/*function to calculate invoice totals*/}
-    function handleInvoiceTotals(total, subtotal){
-      setInvoiceSubtotal(subtotal)
-      setInvoiceTotal(total)
+    function handleInvoiceTotals(){
+      setInvoiceSubtotal()
+      setInvoiceTotal()
+    }
+
+    function addNewInvoiceItem(){
+      setInvoiceItems( (prevItems) => {
+        //add invoice items into array
+
+        const items = []
+
+        if(count > 0){
+            items.push(
+            <InvoiceItem nameRef={itemNameRef} 
+                    quantityRef={itemQuantityRef} 
+                    priceRef={itemPriceRef} 
+                    subtotalRef={itemSubtotalRef} 
+                    amountRef={itemAmountRef} 
+                    taxRate ={taxRate}
+                    />
+          )
+
+        } 
+
+        console.log(items)
+ 
+
+        return [...prevItems, items]
+      })
+      setCount((prevCount) => ++prevCount)
+      console.log(count)
+    }
+
+    function updateDiscount(){
+      let discount = discountRef.current.value
+      setDiscountRate(discount)
     }
  
     return(
@@ -207,17 +255,15 @@ export default function FormInput(){
         </Stack> 
 
         {/*Item List */}
-        <AddInvoiceItem nameRef={itemNameRef} 
-                        quantityRef={itemQuantityRef} 
-                        priceRef={itemPriceRef} 
-                        subtotalRef={itemSubtotalRef} 
-                        amountRef={itemAmountRef} 
-                        vatRef={vatRateRef}
-        />
-        
+
+        {invoiceItems.map( (item) => {
+          return <div>{item}</div>
+        })}
+
+     
         {/*Add Items Button Stack */}
         <Stack direction="horizontal" className="mx-3 my-4 mb-4">
-          <Button className="btn btn-primary d-flex align-items-center">{/*insert icon*/}Add Item</Button>
+          <Button className="btn btn-primary d-flex align-items-center" onClick={addNewInvoiceItem}>{/*insert icon*/}Add Item</Button>
         </Stack>
 
         {/*Section divider*/}
@@ -244,7 +290,7 @@ export default function FormInput(){
 
             <div className="input-group">
               <span className="input-group-text">Discount </span>
-                <input type="number" className="form-control" aria-label="Amount (to the nearest dollar)" />
+                <input ref={discountRef} onChange={updateDiscount} type="number" className="form-control" aria-label="Amount (to the nearest dollar)" />
               <span className="input-group-text">%</span>
             </div>
         </Stack>
@@ -275,7 +321,7 @@ export default function FormInput(){
 
               <Stack direction="vertical" className="align-items-end">                
                 <span className="mb-3">${invoiceSubtotal}</span>            
-                <span className="mb-3">5%</span>            
+                <span className="mb-3">{discountRate}%</span>            
                 <span className="mb-3">0</span>           
                 <span className="mb-3">${invoiceTotal}</span>
               </Stack>      

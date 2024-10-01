@@ -3,7 +3,7 @@ import React, {useState} from 'react'
 
 
 
-export default function AddInvoiceItem({nameRef,quantityRef,priceRef,subtotalRef,amountRef,vatRef}){
+export default function InvoiceItem({nameRef,quantityRef,priceRef,subtotalRef,amountRef,taxRate}){
 
         const [itemSubtotal, setItemSubtotal] = useState(0)
         const [itemTotal, setItemTotal] = useState(0) //includes vat
@@ -12,7 +12,7 @@ export default function AddInvoiceItem({nameRef,quantityRef,priceRef,subtotalRef
            function handleItemTotals(){
             let itemAmount = 0;
             let itemSub = 0;
-            const tax = priceRef.current.value * vatRef.current.value * 0.01 * quantityRef.current.value
+            const tax = priceRef.current.value * taxRate * 0.01 * quantityRef.current.value
             console.log(tax)
             itemSub = quantityRef.current.value * priceRef.current.value 
             itemAmount = itemSub + tax
