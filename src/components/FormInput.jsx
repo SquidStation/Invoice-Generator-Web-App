@@ -7,6 +7,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useInvoice } from '../contexts/InvoiceContext'
 import InvoiceItem from './InvoiceItem';
+import {v4 as uuidV4 }from 'uuid'
 
 
 
@@ -137,13 +138,15 @@ export default function FormInput(){
 
     function addNewInvoiceItem(){
       setInvoiceItems( (prevItems) => {
-        //add invoice items into array
+        //new temp array to hold our invoice items
+        const item = []
+        //generate random unique id for each item
+        const itemId = uuidV4()
 
-        const items = []
-
-        if(count > 0){
-            items.push(
-            <InvoiceItem nameRef={itemNameRef} 
+            item.push(
+            <InvoiceItem 
+                    itemIdRef={itemId} // id prop to be used to assign unique values to each input field
+                    nameRef={itemNameRef} 
                     quantityRef={itemQuantityRef} 
                     priceRef={itemPriceRef} 
                     subtotalRef={itemSubtotalRef} 
@@ -152,15 +155,12 @@ export default function FormInput(){
                     />
           )
 
-        } 
+          console.log(itemId)
 
-        console.log(items)
- 
 
-        return [...prevItems, items]
+        return [...prevItems, {id: itemId, item: item}]
       })
-      setCount((prevCount) => ++prevCount)
-      console.log(count)
+
     }
 
     function updateDiscount(){
@@ -257,7 +257,7 @@ export default function FormInput(){
         {/*Item List */}
 
         {invoiceItems.map( (item) => {
-          return <div>{item}</div>
+          return <div key={item.id}>{item.item}</div>
         })}
 
      

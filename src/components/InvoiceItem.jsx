@@ -3,7 +3,7 @@ import React, {useState} from 'react'
 
 
 
-export default function InvoiceItem({nameRef,quantityRef,priceRef,subtotalRef,amountRef,taxRate}){
+export default function InvoiceItem({itemIdRef, nameRef,quantityRef,priceRef,subtotalRef,amountRef,taxRate}){
 
         const [itemSubtotal, setItemSubtotal] = useState(0)
         const [itemTotal, setItemTotal] = useState(0) //includes vat
