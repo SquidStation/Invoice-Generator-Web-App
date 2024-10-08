@@ -125,8 +125,9 @@ export default function FormInput(){
     }
 
        {/*function to calculate and update tax rate*/}
-    function updateTax(){
-      let tax = vatRateRef.current.value
+    function updateTax(e){
+      e.preventDefault()
+      let tax = e.target.id === "vatRate" ? e.target.value : taxRate
       setTaxRate(tax)
     }
 
@@ -151,11 +152,11 @@ export default function FormInput(){
                     priceRef={itemPriceRef} 
                     subtotalRef={itemSubtotalRef} 
                     amountRef={itemAmountRef} 
-                    taxRate ={taxRate}
+                    taxRateRef ={taxRate}
                     />
           )
 
-          console.log(itemId)
+          
 
 
         return [...prevItems, {id: itemId, item: item}]
@@ -284,7 +285,7 @@ export default function FormInput(){
             
             <div className="input-group">
               <span className="input-group-text">VAT Rate</span>
-                <input ref={vatRateRef} type="number" onChange={updateTax} className="form-control" aria-label="Amount (to the nearest dollar)" />
+                <input ref={vatRateRef} type="number" onChange={updateTax} id='vatRate' className="form-control" aria-label="Amount (to the nearest dollar)" />
               <span className="input-group-text">%</span>
             </div>
 
