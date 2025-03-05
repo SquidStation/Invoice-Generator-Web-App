@@ -1,4 +1,4 @@
-import { Stack } from 'react-bootstrap'
+import { Button, Stack } from 'react-bootstrap'
 import React, {useState, useEffect} from 'react'
 
 
@@ -36,6 +36,8 @@ export default function InvoiceItem({itemIdRef, nameRef,quantityRef,priceRef,sub
             itemAmount = itemSub + tax
             setItemSubtotal(itemSub)
             setItemTotal(itemAmount)
+
+            
           }
 
 
@@ -60,6 +62,7 @@ export default function InvoiceItem({itemIdRef, nameRef,quantityRef,priceRef,sub
                 </Stack>
                 <Stack direction="vertical">
                     <input ref={amountRef} placeholder= {'$'+itemTotal}  disabled type="text" id={itemIdRef+"Amount"} className="form-control mb-2" aria-label="Amount" />
+             
                 </Stack>
                 {/*Action Stack */}
                 <Stack direction="vertical" className="d-flex align-items-center">
