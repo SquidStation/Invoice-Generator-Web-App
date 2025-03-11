@@ -39,13 +39,7 @@ export default function FormInput(){
     const clientemailRef = useRef();
     const clientaddressRef = useRef();
     const clientphoneRef = useRef();
-     {/*Invoice Items ref*/}
-     const itemNameRef = useRef();
-     const itemDescriptionRef = useRef();
-     const itemQuantityRef = useRef();
-     const itemPriceRef = useRef();
-     const itemSubtotalRef = useRef();
-     const itemAmountRef = useRef();
+ 
 
      {/*tax rate*/}
      const vatRateRef = useRef();
@@ -127,45 +121,22 @@ export default function FormInput(){
        {/*function to calculate and update tax rate*/}
     function updateTax(e){
       e.preventDefault()
-      let tax = e.target.id === "vatRate" ? e.target.value : taxRate
-      setTaxRate(tax)
+      const newTaxRate = e.target.id === "vatRate" ? parseFloat(e.target.value ) : taxRate
+      setTaxRate(newTaxRate)
       //update tax on all invoiceitems by mapping all items on every change
-      const newArray = []
 
-      invoiceItems.map( (currentItem, index)=> {
+      setInvoiceItems( (prevItems) => (        prevItems.map( (item) => (
+        { ...item, 
+        item: item.item.map( (subItem) => {
+          const tax = subItem.price * 0.01 * newTaxRate * subItem.quantity;
+          const subtotal = subItem.price * subItem.quantity;
+          const total = subtotal + tax;
 
-        const itemId = uuidV4()
-
-         newArray.push (
-          <InvoiceItem 
-          itemIdRef={ itemId} // id prop to be used to assign unique values to each input field
-          nameRef={currentItem.item[0].props.itemNameRef} 
-          quantityRef={currentItem.item[0].props.quantityRef} 
-          priceRef={currentItem.item[0].props.itemPriceRef} 
-          subtotalRef={currentItem.item[0].props.itemSubtotalRef} 
-          amountRef={currentItem.item[0].props.itemAmountRef} 
-          taxRateRef ={tax}
-          />
-        )
-        
-        ///console.log("Current Item and Index"+currentItem+" "+index)
-        
-        setInvoiceItems(() => {
-          return [{id:itemId, item: newArray }]
-      })
-        //console.log(item.item[0].props.itemIdRef)
-      })
-
-      console.log("New Array Contents: " + newArray)
-      console.log("Invoice Items in state: " + invoiceItems)
-
-     // console.log("Invoice Items After Tax Update"+invoiceItems)
+          return { ...subItem, taxRate: newTaxRate, subtotal, total}
+        })
+      }))))
 
 
-      //console.log("current VAT " +tax)
-      //let data = invoiceItems[1].item
-      //console.log(data[0].props.taxRateRef)
-      //console.log(data[0].props)
 
     }
 
@@ -182,15 +153,15 @@ export default function FormInput(){
         //generate random unique id for each item
         const itemId = uuidV4()
 
-        //create an newItem object that passes values to out invoiceitem state
+        //create an newItem object that passes values to our invoiceitem state
         const newItem = {
                 itemId: itemId,
                 name: '', //initial empty values
-                quantity: 0,
-                price: 0,
-                subtotal: 0,
-                amount: 0,
-                taxRate: 15,
+                quantity: '',
+                price: '',
+                subtotal: '',
+                amount: '',
+                taxRate: taxRate,
               };
 
           
@@ -206,6 +177,8 @@ export default function FormInput(){
       setDiscountRate(discount)
     }
  
+    console.log(invoiceItems)
+    
     return(
         <>
         {/*Invoice number and dates stack*/}
@@ -293,10 +266,9 @@ export default function FormInput(){
         </Stack> 
 
         {/*Item List */}
-
-      {
-
-        invoiceItems.map( (item) => {
+              
+      { invoiceItems.map( (item) => (
+          
           <div key={item.id}>
 
           {item.item.map( (subItem) => (
@@ -317,7 +289,7 @@ export default function FormInput(){
           ))}
 
         </div>
-        })
+        ))
 
       }
 
