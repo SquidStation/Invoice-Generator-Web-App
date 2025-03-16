@@ -1,0 +1,7 @@
+.delete-icon{
+    color: #000000;
+    cursor: pointer;
+}
+.delete-icon:hover{
+    color: #c40909;
+}

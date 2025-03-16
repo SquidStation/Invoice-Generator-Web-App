@@ -1,6 +1,8 @@
 import { Button, Stack } from 'react-bootstrap'
 import React, {useState, useEffect, useRef} from 'react'
-
+import { HugeiconsIcon } from '@hugeicons/react';
+import { Delete04Icon } from '@hugeicons/core-free-icons';
+import '../InvoiceItem.css'
 
 
 export default function InvoiceItem({itemId,initialName,initialQuantity,initialPrice, initialSubtotal, initialAmount, taxRate}){
@@ -68,6 +70,12 @@ export default function InvoiceItem({itemId,initialName,initialQuantity,initialP
            
           } 
 
+          //Function to check handle removing or deleting an item from list
+          function deleteItem(e){
+            e.preventDefault()
+
+          }
+
 
 
     return(
@@ -95,10 +103,11 @@ export default function InvoiceItem({itemId,initialName,initialQuantity,initialP
                 </Stack>
                 {/*Action Stack */}
                 <Stack direction="vertical" className="d-flex align-items-center">
-                    <div>{/*Insert Icon*/}</div>
+                    <div className='delete-icon' id={itemId+"Icon"} onClick={deleteItem}> <HugeiconsIcon icon={Delete04Icon} /></div>
                 </Stack>
             </Stack>
     
         </>
     )
 }
+
