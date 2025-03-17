@@ -65,23 +65,21 @@ export default function FormInput(){
 
     {/*State to track added invoice items in an array*/}
     const [invoiceItems, setInvoiceItems] = useState([])
+
+    {/*State to track delete click action*/}
+    const [deleteButtonClicked, SetDeleteButtonClicked] = useState(false)
     
 
     {/*state to update invoice totals and subtotal*/}
     const [invoiceSubtotal, setInvoiceSubtotal] = useState(0)
     const [invoiceTotal, setInvoiceTotal] = useState(0)
 
-    {/*State to update*/}
-    const [count, setCount] = useState(1)
 
     function getInvoiceName(){
       setInvoiceName(invoiceNumRef.current.value)
     }
 
-
-
-
-
+  {/*function to add all form input values to invoice*/}
     function handleUserInput(e){
       e.preventDefault()
 
@@ -176,8 +174,12 @@ export default function FormInput(){
       let discount = discountRef.current.value
       setDiscountRate(discount)
     }
+
+  {/*call back function to delete invoice items*/}
+  function deleteInvoiceItem(clickedStatus){
+
+  }
  
-    console.log(invoiceItems)
     
     return(
         <>
@@ -282,6 +284,8 @@ export default function FormInput(){
               initialSubtotal={subItem.subtotal}
               initialAmount={subItem.amount}
               taxRate={subItem.taxRate}
+              deleItemStatus={deleteButtonClicked}
+              deleteItemCallBack={deleteInvoiceItem} //callback function to handle needed return input from the invoiceitem component for deletion
             
             />
 
