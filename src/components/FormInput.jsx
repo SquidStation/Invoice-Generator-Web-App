@@ -123,7 +123,7 @@ export default function FormInput(){
       setTaxRate(newTaxRate)
       //update tax on all invoiceitems by mapping all items on every change
 
-      setInvoiceItems( (prevItems) => (        prevItems.map( (item) => (
+      setInvoiceItems( (prevItems) => ( prevItems.map( (item) => (
         { ...item, 
         item: item.item.map( (subItem) => {
           const tax = subItem.price * 0.01 * newTaxRate * subItem.quantity;
@@ -160,6 +160,8 @@ export default function FormInput(){
                 subtotal: '',
                 amount: '',
                 taxRate: taxRate,
+                deltemStatus: deleteButtonClicked,
+                delItemCallBack: deleteInvoiceItem,
               };
 
           
@@ -176,11 +178,20 @@ export default function FormInput(){
     }
 
   {/*call back function to delete invoice items*/}
-  function deleteInvoiceItem(clickedStatus){
-
+  function deleteInvoiceItem(clickedStatus, id){
+    SetDeleteButtonClicked(clickedStatus)
+    setInvoiceItems((prevItems)=> (prevItems.map( (item)=> {
+      console.log(item.id)
+      item.id === id ? prevItems.splice ( prevItems.indexOf(item), 1) : console.log("No Item found")
+      return {...item}
+    })))  
   }
- 
-    
+
+  {/*force refresh/update delete button state*/}
+  useEffect( ()=>{
+    deleteInvoiceItem()
+  },[ deleteButtonClicked])
+
     return(
         <>
         {/*Invoice number and dates stack*/}
@@ -284,8 +295,8 @@ export default function FormInput(){
               initialSubtotal={subItem.subtotal}
               initialAmount={subItem.amount}
               taxRate={subItem.taxRate}
-              deleItemStatus={deleteButtonClicked}
-              deleteItemCallBack={deleteInvoiceItem} //callback function to handle needed return input from the invoiceitem component for deletion
+              deleteItemStatus={subItem.deltemStatus}
+              deleteItemCallBack={subItem.delItemCallBack} //callback function to handle needed return input from the invoiceitem component for deletion
             
             />
 

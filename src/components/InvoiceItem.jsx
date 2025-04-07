@@ -5,14 +5,14 @@ import { Delete04Icon } from '@hugeicons/core-free-icons';
 import '../InvoiceItem.css'
 
 
-export default function InvoiceItem({itemId,initialName,initialQuantity,initialPrice, initialSubtotal, initialAmount, taxRate, deleItemStatus, deleteInvoiceItem}){
+export default function InvoiceItem({itemId,initialName,initialQuantity,initialPrice, initialSubtotal, initialAmount, taxRate, deleteItemStatus, deleteItemCallBack}){
 
         const [itemSubtotal, setItemSubtotal] = useState(initialSubtotal)
         const [itemTotal, setItemTotal] = useState(initialAmount) //includes vat
         const [itemName, setItemName] = useState(initialName)
         const [itemPrice, setItemPrice] = useState(initialPrice) //monitor price value state
         const [itemQuantity, setItemQuantity] = useState(initialQuantity) //monitor quantity value state
-        const [itemDeleteStatus, setItemDeleteStatus] = useState(deleItemStatus) // Track deleting of each items 
+        const [itemDeleteStatus, setItemDeleteStatus] = useState(deleteItemStatus) // Track deleting of current item 
 
 
         {/*create refs for each invoice item input*/}
@@ -72,11 +72,9 @@ export default function InvoiceItem({itemId,initialName,initialQuantity,initialP
           } 
 
           //Function to check handle removing or deleting an item from list and export
-          function deleteItem(e){
-            e.preventDefault()
-
-            console.log("Current Delete Item Status:" + deleItemStatus)
-
+          function deleteItem(){          
+            setItemDeleteStatus(true) //update delete status locally for the invoice item component
+            deleteItemCallBack(true, itemId) //update delete status to our call back function
           }
 
 
