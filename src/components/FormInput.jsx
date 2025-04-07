@@ -182,8 +182,12 @@ export default function FormInput(){
     SetDeleteButtonClicked(clickedStatus)
     setInvoiceItems((prevItems)=> (prevItems.map( (item)=> {
       console.log(item.id)
-      item.id === id ? prevItems.splice ( prevItems.indexOf(item), 1) : console.log("No Item found")
-      return {...item}
+      if(item.id === id){
+        prevItems.splice ( prevItems.indexOf(item), 1) 
+      } else {
+        return {...item}
+      }
+      
     })))  
   }
 
