@@ -184,9 +184,12 @@ export default function FormInput(){
       console.log(item.id)
       if(item.id === id){
         prevItems.splice ( prevItems.indexOf(item), 1) 
+        return {...item} //return all other values after correct match
       } else {
-        return {...item}
+        return {...item} //prevent app from running undefined state values if no match happens
       }
+
+
       
     })))  
   }
